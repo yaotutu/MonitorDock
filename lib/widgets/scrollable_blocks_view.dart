@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
 import 'block/clock/clock_block.dart';
 import 'block/server_status/server_status_block.dart';
 
@@ -10,7 +9,7 @@ class ScrollableBlocksView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
-      color: AppTheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: IntrinsicWidth(

@@ -11,15 +11,11 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true, // 启用 Material 3
-        colorScheme: ColorScheme.light(
-          primary: AppTheme.primary,
-          onPrimary: AppTheme.onPrimary,
-          secondary: AppTheme.secondary,
-          onSecondary: AppTheme.onSecondary,
-          error: AppTheme.error,
-          background: AppTheme.background,
-          surface: AppTheme.surface,
+        useMaterial3: true,
+        colorScheme: AppTheme.lightColorScheme,
+        dividerTheme: DividerThemeData(
+          color: AppTheme.lightColorScheme.outline.withAlpha(128),
+          thickness: 0.5,
         ),
       ),
       home: const ScrollableBlocksView(),

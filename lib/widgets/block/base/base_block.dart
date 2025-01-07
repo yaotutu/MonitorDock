@@ -34,16 +34,37 @@ class BaseBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: width,
       padding: padding,
-      decoration: decoration ?? AppTheme.cardDecoration,
+      decoration: decoration ??
+          BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: colorScheme.outline.withAlpha(128),
+              width: 0.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: colorScheme.shadow.withAlpha(13),
+                offset: const Offset(0, 1),
+                blurRadius: 3,
+              ),
+            ],
+          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (title != null) ...[
-            _buildTitle(),
-            const Divider(color: AppTheme.outlineVariant),
+            _buildTitle(context),
+            Divider(
+              height: 1,
+              thickness: 0.5,
+              color: colorScheme.outline.withAlpha(128),
+            ),
           ],
           Expanded(
             child: _buildContent(context),
@@ -54,44 +75,43 @@ class BaseBlock extends StatelessWidget {
   }
 
   /// 构建标题组件
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Text(
       title!,
-      style: AppTheme.titleMedium,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: colorScheme.onSurface,
+          ),
       overflow: TextOverflow.ellipsis,
     );
   }
 
   /// 构建内容区域
   Widget _buildContent(BuildContext context) {
-    Widget content = _buildMainContent();
+    Widget content = _buildMainContent(context);
 
     // 根据不同的溢出模式处理内容
     switch (overflowMode) {
       case BlockOverflowMode.scroll:
         return enableHorizontalScroll
             ? ScrollConfiguration(
-                // 隐藏滚动条
-                behavior: ScrollConfiguration.of(context).copyWith(
+                behavior: ScrollBehavior().copyWith(
                   scrollbars: false,
-                ),
-                // 支持水平和垂直滚动
-                child: SingleChildScrollView(
                   physics: physics ?? const BouncingScrollPhysics(),
+                ),
+                child: SingleChildScrollView(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    physics: physics ?? const BouncingScrollPhysics(),
                     child: content,
                   ),
                 ),
               )
             : ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
+                behavior: ScrollBehavior().copyWith(
                   scrollbars: false,
-                ),
-                // 只支持垂直滚动
-                child: SingleChildScrollView(
                   physics: physics ?? const BouncingScrollPhysics(),
+                ),
+                child: SingleChildScrollView(
                   child: content,
                 ),
               );
@@ -103,17 +123,16 @@ class BaseBlock extends StatelessWidget {
   }
 
   /// 构建主要内容
-  Widget _buildMainContent() {
-    // 显示加载状态
+  Widget _buildMainContent(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     if (isLoading) {
       return const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
-        ),
+        child: CircularProgressIndicator.adaptive(),
       );
     }
 
-    // 显示错误信息
     if (errorMessage != null) {
       return Center(
         child: Column(
@@ -121,14 +140,16 @@ class BaseBlock extends StatelessWidget {
           children: [
             Icon(
               Icons.error_outline,
-              color: AppTheme.error,
+              color: colorScheme.error,
               size: 32,
             ),
             const SizedBox(height: 8),
             Text(
               errorMessage!,
               textAlign: TextAlign.center,
-              style: AppTheme.bodyMedium.copyWith(color: AppTheme.error),
+              style: textTheme.bodyMedium?.copyWith(
+                color: colorScheme.error,
+              ),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),
@@ -137,7 +158,6 @@ class BaseBlock extends StatelessWidget {
       );
     }
 
-    // 显示正常内容
     return child;
   }
 }

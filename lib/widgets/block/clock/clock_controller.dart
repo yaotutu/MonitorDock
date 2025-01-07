@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 
 class ClockController extends ChangeNotifier {
   DateTime _currentTime = DateTime.now();
-  late Timer _timer;
+  Timer? _timer;
 
   DateTime get currentTime => _currentTime;
 
   void startTimer() {
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       _currentTime = DateTime.now();
       notifyListeners();
@@ -15,7 +16,8 @@ class ClockController extends ChangeNotifier {
   }
 
   void stopTimer() {
-    _timer.cancel();
+    _timer?.cancel();
+    _timer = null;
   }
 
   @override

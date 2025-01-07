@@ -26,6 +26,8 @@ class _ServerStatusBlockState extends State<ServerStatusBlock> {
   }
 
   Future<void> _fetchServerStatus() async {
+    if (!mounted) return;
+
     try {
       setState(() {
         _isLoading = true;
@@ -33,11 +35,15 @@ class _ServerStatusBlockState extends State<ServerStatusBlock> {
       });
 
       final status = await _service.fetchStatus();
+      if (!mounted) return;
+
       setState(() {
         _serverStatus = status;
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
+
       setState(() {
         _isLoading = false;
         _errorMessage = '获取服务器状态失败';
@@ -48,36 +54,40 @@ class _ServerStatusBlockState extends State<ServerStatusBlock> {
   @override
   Widget build(BuildContext context) {
     return BaseBlock(
+      width: 320,
       title: '服务器状态',
       isLoading: _isLoading,
       errorMessage: _errorMessage,
       overflowMode: BlockOverflowMode.scroll,
       child: _serverStatus == null
           ? const SizedBox()
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                StatusItem(
-                  label: '状态',
-                  value: _serverStatus!.status,
-                  valueColor: AppTheme.getStatusColor(_serverStatus!.status),
-                ),
-                const SizedBox(height: 8),
-                StatusItem(
-                  label: '运行时间',
-                  value: _serverStatus!.uptime,
-                ),
-                const SizedBox(height: 8),
-                StatusItem(
-                  label: '内存使用',
-                  value: _serverStatus!.memory,
-                ),
-                const SizedBox(height: 8),
-                StatusItem(
-                  label: 'CPU使用',
-                  value: _serverStatus!.cpu,
-                ),
-              ],
+          : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  StatusItem(
+                    label: '状态',
+                    value: _serverStatus!.status,
+                    valueColor: AppTheme.getStatusColor(_serverStatus!.status),
+                  ),
+                  const SizedBox(height: 12),
+                  StatusItem(
+                    label: '运行时间',
+                    value: _serverStatus!.uptime,
+                  ),
+                  const SizedBox(height: 12),
+                  StatusItem(
+                    label: '内存使用',
+                    value: _serverStatus!.memory,
+                  ),
+                  const SizedBox(height: 12),
+                  StatusItem(
+                    label: 'CPU使用',
+                    value: _serverStatus!.cpu,
+                  ),
+                ],
+              ),
             ),
     );
   }
