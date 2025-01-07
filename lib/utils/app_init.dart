@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 class AppInit {
   static Future<void> initialize() async {
@@ -7,7 +7,7 @@ class AppInit {
 
     // 设置全屏和系统UI
     await SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
+      SystemUiMode.immersive,
       overlays: [],
     );
 
