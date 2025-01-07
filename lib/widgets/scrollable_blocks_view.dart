@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 import 'block/clock/clock_block.dart';
 import 'block/server_status/server_status_block.dart';
 
@@ -8,8 +9,8 @@ class ScrollableBlocksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      color: Colors.grey[200],
+      padding: const EdgeInsets.all(24),
+      color: AppTheme.background,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: IntrinsicWidth(
@@ -17,9 +18,9 @@ class ScrollableBlocksView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: const [
               ClockBlock(),
-              SizedBox(width: 10),
+              SizedBox(width: 16),
               ServerStatusBlock(),
-              SizedBox(width: 10),
+              SizedBox(width: 16),
             ],
           ),
         ),

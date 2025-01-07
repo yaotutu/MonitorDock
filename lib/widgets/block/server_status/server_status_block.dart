@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../theme/app_theme.dart';
 import '../base/base_block.dart';
 import '../base/block_overflow.dart';
 import 'models/server_status.dart';
@@ -56,10 +57,26 @@ class _ServerStatusBlockState extends State<ServerStatusBlock> {
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                StatusItem(label: '状态', value: _serverStatus!.status),
-                StatusItem(label: '运行时间', value: _serverStatus!.uptime),
-                StatusItem(label: '内存使用', value: _serverStatus!.memory),
-                StatusItem(label: 'CPU使用', value: _serverStatus!.cpu),
+                StatusItem(
+                  label: '状态',
+                  value: _serverStatus!.status,
+                  valueColor: AppTheme.getStatusColor(_serverStatus!.status),
+                ),
+                const SizedBox(height: 8),
+                StatusItem(
+                  label: '运行时间',
+                  value: _serverStatus!.uptime,
+                ),
+                const SizedBox(height: 8),
+                StatusItem(
+                  label: '内存使用',
+                  value: _serverStatus!.memory,
+                ),
+                const SizedBox(height: 8),
+                StatusItem(
+                  label: 'CPU使用',
+                  value: _serverStatus!.cpu,
+                ),
               ],
             ),
     );
