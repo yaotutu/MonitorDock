@@ -1,163 +1,145 @@
 import 'package:flutter/material.dart';
-import '../../../theme/app_theme.dart';
+import 'dart:math' as math;
 import 'block_overflow.dart';
 
-/// 基础块组件
-/// 用于创建统一样式的内容块，支持标题、加载状态、错误显示等
-class BaseBlock extends StatelessWidget {
-  final double width; // 块的宽度
-  final Color? backgroundColor; // 背景色
-  final Widget child; // 子组件
-  final EdgeInsetsGeometry? padding; // 内边距
-  final BoxDecoration? decoration; // 自定义装饰
-  final String? title; // 标题
-  final bool isLoading; // 是否正在加载
-  final String? errorMessage; // 错误信息
-  final BlockOverflowMode overflowMode; // 内容溢出处理模式
-  final ScrollPhysics? physics; // 滚动物理效果
-  final bool enableHorizontalScroll; // 是否启用水平滚动
+class BaseBlock extends StatefulWidget {
+  final String title;
+  final Widget child;
+  final Widget? secondaryView;
+  final BlockOverflowMode overflowMode;
+  final Duration flipDuration;
+  final double width;
 
   const BaseBlock({
     super.key,
-    this.width = 280,
-    this.backgroundColor,
+    required this.title,
     required this.child,
-    this.padding = const EdgeInsets.all(16),
-    this.decoration,
-    this.title,
-    this.isLoading = false,
-    this.errorMessage,
-    this.overflowMode = BlockOverflowMode.scroll,
-    this.physics,
-    this.enableHorizontalScroll = false,
+    this.secondaryView,
+    this.overflowMode = BlockOverflowMode.clip,
+    this.flipDuration = const Duration(milliseconds: 800),
+    this.width = 320,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+  State<BaseBlock> createState() => _BaseBlockState();
+}
 
+class _BaseBlockState extends State<BaseBlock>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: widget.flipDuration,
+      vsync: this,
+    );
+
+    _animation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _toggleView() {
+    if (widget.secondaryView == null) return;
+    if (_controller.isAnimating) return;
+
+    if (_controller.status == AnimationStatus.dismissed) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  Widget _buildBaseView({required Widget child}) {
     return Container(
-      width: width,
-      padding: padding,
-      decoration: decoration ??
-          BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: colorScheme.outline.withAlpha(128),
-              width: 0.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: colorScheme.shadow.withAlpha(13),
-                offset: const Offset(0, 1),
-                blurRadius: 3,
-              ),
-            ],
+      width: widget.width,
+      constraints: const BoxConstraints(minHeight: 200),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
+        ],
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (title != null) ...[
-            _buildTitle(context),
-            Divider(
-              height: 1,
-              thickness: 0.5,
-              color: colorScheme.outline.withAlpha(128),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              widget.title,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-          ],
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
           Expanded(
-            child: _buildContent(context),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: widget.overflowMode == BlockOverflowMode.scroll
+                  ? SingleChildScrollView(child: child)
+                  : child,
+            ),
           ),
         ],
       ),
     );
   }
 
-  /// 构建标题组件
-  Widget _buildTitle(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Text(
-      title!,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: colorScheme.onSurface,
-          ),
-      overflow: TextOverflow.ellipsis,
-    );
-  }
+  @override
+  Widget build(BuildContext context) {
+    final frontView = _buildBaseView(child: widget.child);
 
-  /// 构建内容区域
-  Widget _buildContent(BuildContext context) {
-    Widget content = _buildMainContent(context);
-
-    // 根据不同的溢出模式处理内容
-    switch (overflowMode) {
-      case BlockOverflowMode.scroll:
-        return enableHorizontalScroll
-            ? ScrollConfiguration(
-                behavior: ScrollBehavior().copyWith(
-                  scrollbars: false,
-                  physics: physics ?? const BouncingScrollPhysics(),
-                ),
-                child: SingleChildScrollView(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: content,
-                  ),
-                ),
-              )
-            : ScrollConfiguration(
-                behavior: ScrollBehavior().copyWith(
-                  scrollbars: false,
-                  physics: physics ?? const BouncingScrollPhysics(),
-                ),
-                child: SingleChildScrollView(
-                  child: content,
-                ),
-              );
-      case BlockOverflowMode.clip:
-        return ClipRect(child: content); // 裁剪溢出内容
-      case BlockOverflowMode.visible:
-        return content; // 显示溢出内容
-    }
-  }
-
-  /// 构建主要内容
-  Widget _buildMainContent(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
+    if (widget.secondaryView == null) {
+      return frontView;
     }
 
-    if (errorMessage != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              color: colorScheme.error,
-              size: 32,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              errorMessage!,
-              textAlign: TextAlign.center,
-              style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.error,
-              ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
-            ),
-          ],
+    return GestureDetector(
+      onTap: _toggleView,
+      child: SizedBox(
+        width: widget.width,
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            final angle = _animation.value * math.pi;
+            final transform = Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateY(angle);
+
+            return Transform(
+              transform: transform,
+              alignment: Alignment.center,
+              child: angle < math.pi / 2
+                  ? frontView
+                  : Transform(
+                      transform: Matrix4.identity()..rotateY(math.pi),
+                      alignment: Alignment.center,
+                      child: _buildBaseView(child: widget.secondaryView!),
+                    ),
+            );
+          },
         ),
-      );
-    }
-
-    return child;
+      ),
+    );
   }
 }
