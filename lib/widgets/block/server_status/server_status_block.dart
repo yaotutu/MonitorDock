@@ -129,7 +129,6 @@ class _ServerStatusBlockState extends State<ServerStatusBlock> {
   @override
   Widget build(BuildContext context) {
     return BaseBlock(
-      title: '服务器状态',
       overflowMode: BlockOverflowMode.scroll,
       child: _buildContent(),
     );

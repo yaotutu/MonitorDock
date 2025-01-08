@@ -7,14 +7,14 @@ class ScrollableBlocksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      color: Theme.of(context).colorScheme.surface,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: IntrinsicWidth(
+    return Scaffold(
+      body: Container(
+        padding: const EdgeInsets.all(24),
+        color: Theme.of(context).colorScheme.surface,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: const [
               ClockBlock(),
               SizedBox(width: 16),

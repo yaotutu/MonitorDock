@@ -3,7 +3,6 @@ import '../base/base_block.dart';
 import '../base/block_overflow.dart';
 import 'clock_controller.dart';
 import 'clock_display.dart';
-import 'clock_detail_view.dart';
 
 class ClockBlock extends StatefulWidget {
   const ClockBlock({super.key});
@@ -30,18 +29,11 @@ class _ClockBlockState extends State<ClockBlock> {
   @override
   Widget build(BuildContext context) {
     return BaseBlock(
-      title: '时间',
       overflowMode: BlockOverflowMode.clip,
       child: ListenableBuilder(
         listenable: _controller,
         builder: (context, _) {
           return ClockDisplay(time: _controller.currentTime);
-        },
-      ),
-      secondaryView: ListenableBuilder(
-        listenable: _controller,
-        builder: (context, _) {
-          return ClockDetailView(time: _controller.currentTime);
         },
       ),
     );
