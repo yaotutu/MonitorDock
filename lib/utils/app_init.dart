@@ -5,19 +5,49 @@ import 'package:flutter/services.dart';
 class AppInit {
   /// 初始化应用程序设置
   static Future<void> initialize() async {
-    // 确保Flutter绑定初始化
-    WidgetsFlutterBinding.ensureInitialized();
+    try {
+      // 确保Flutter绑定初始化
+      WidgetsFlutterBinding.ensureInitialized();
 
-    // 设置全屏模式，隐藏系统UI（状态栏和导航栏）
+      // 设置系统UI模式
+      await _setupSystemUI();
+
+      // 设置屏幕方向
+      await _setupOrientation();
+
+      // 设置系统导航栏颜色
+      _setupSystemNavigationBar();
+    } catch (e) {
+      debugPrint('应用初始化失败: $e');
+      rethrow;
+    }
+  }
+
+  /// 设置系统UI模式
+  static Future<void> _setupSystemUI() async {
     await SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.immersive,
-      overlays: [],
+      SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top],
     );
+  }
 
-    // 强制横屏显示
+  /// 设置屏幕方向
+  static Future<void> _setupOrientation() async {
     await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft, // 允许左横屏
-      DeviceOrientation.landscapeRight, // 允许右横屏
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
+  }
+
+  /// 设置系统导航栏
+  static void _setupSystemNavigationBar() {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    );
   }
 }
