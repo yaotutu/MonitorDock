@@ -9,7 +9,7 @@ class ScrollableBlocksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.lightColorScheme.background,
+      backgroundColor: AppTheme.lightColorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(

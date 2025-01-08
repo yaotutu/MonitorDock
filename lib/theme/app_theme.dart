@@ -2,9 +2,59 @@ import 'package:flutter/material.dart';
 
 /// Material Design 3 主题配置
 class AppTheme {
-  AppTheme._();
+  static final ThemeData lightTheme = ThemeData(
+    useMaterial3: true,
+    colorScheme: lightColorScheme,
+    textTheme: _textTheme,
+    cardTheme: CardTheme(
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: lightColorScheme.outline.withAlpha(128),
+          width: 0.5,
+        ),
+      ),
+    ),
+    dividerTheme: DividerThemeData(
+      color: lightColorScheme.outline.withAlpha(128),
+      thickness: 0.5,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 1,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
+  );
 
-  // Material 3 调色板
+  static final ThemeData darkTheme = ThemeData(
+    useMaterial3: true,
+    colorScheme: darkColorScheme,
+    textTheme: _textTheme,
+    cardTheme: CardTheme(
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: darkColorScheme.outline.withAlpha(128),
+          width: 0.5,
+        ),
+      ),
+    ),
+    dividerTheme: DividerThemeData(
+      color: darkColorScheme.outline.withAlpha(128),
+      thickness: 0.5,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 1,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
+  );
+
+  // Material 3 亮色调色板
   static const ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,
     primary: Color(0xFF6750A4),
@@ -33,7 +83,38 @@ class AppTheme {
     inverseSurface: Color(0xFF313033),
     onInverseSurface: Color(0xFFF4EFF4),
     inversePrimary: Color(0xFFD0BCFF),
-    // 新的 Material 3 颜色
+    scrim: Color(0xFF000000),
+  );
+
+  // Material 3 暗色调色板
+  static const ColorScheme darkColorScheme = ColorScheme(
+    brightness: Brightness.dark,
+    primary: Color(0xFFD0BCFF),
+    onPrimary: Color(0xFF381E72),
+    primaryContainer: Color(0xFF4F378B),
+    onPrimaryContainer: Color(0xFFEADDFF),
+    secondary: Color(0xFFCCC2DC),
+    onSecondary: Color(0xFF332D41),
+    secondaryContainer: Color(0xFF4A4458),
+    onSecondaryContainer: Color(0xFFE8DEF8),
+    tertiary: Color(0xFFEFB8C8),
+    onTertiary: Color(0xFF492532),
+    tertiaryContainer: Color(0xFF633B48),
+    onTertiaryContainer: Color(0xFFFFD8E4),
+    error: Color(0xFFF2B8B5),
+    onError: Color(0xFF601410),
+    errorContainer: Color(0xFF8C1D18),
+    onErrorContainer: Color(0xFFF9DEDC),
+    surface: Color(0xFF1C1B1F),
+    onSurface: Color(0xFFE6E1E5),
+    surfaceTint: Color(0xFFD0BCFF),
+    surfaceContainerHighest: Color(0xFF322F35),
+    onSurfaceVariant: Color(0xFFCAC4D0),
+    outline: Color(0xFF938F99),
+    shadow: Color(0xFF000000),
+    inverseSurface: Color(0xFFE6E1E5),
+    onInverseSurface: Color(0xFF313033),
+    inversePrimary: Color(0xFF6750A4),
     scrim: Color(0xFF000000),
   );
 
@@ -42,94 +123,80 @@ class AppTheme {
   static const Color warning = Color(0xFFFB8C00);
   static const Color info = Color(0xFF2196F3);
 
-  /// 阴影配置
-  static List<BoxShadow> elevation1 = [
-    BoxShadow(
-      color: lightColorScheme.shadow.withAlpha(13),
-      offset: const Offset(0, 1),
-      blurRadius: 3,
+  static const TextTheme _textTheme = TextTheme(
+    displayLarge: TextStyle(
+      fontSize: 57,
+      fontWeight: FontWeight.w400,
+      letterSpacing: -0.25,
+      height: 1.12,
     ),
-  ];
-
-  /// 文字样式
-  static TextStyle displayLarge = TextStyle(
-    fontSize: 57,
-    fontWeight: FontWeight.w400,
-    letterSpacing: -0.25,
-    height: 1.12,
-    color: lightColorScheme.onSurface,
-  );
-
-  static TextStyle displayMedium = TextStyle(
-    fontSize: 45,
-    fontWeight: FontWeight.w400,
-    letterSpacing: 0,
-    height: 1.16,
-    color: lightColorScheme.onSurface,
-  );
-
-  static TextStyle titleLarge = TextStyle(
-    fontSize: 22,
-    fontWeight: FontWeight.w400,
-    letterSpacing: 0,
-    height: 1.27,
-    color: lightColorScheme.onSurface,
-  );
-
-  static TextStyle titleMedium = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.15,
-    height: 1.5,
-    color: lightColorScheme.onSurface,
-  );
-
-  static TextStyle bodyLarge = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    letterSpacing: 0.5,
-    height: 1.5,
-    color: lightColorScheme.onSurface,
-  );
-
-  static TextStyle bodyMedium = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    letterSpacing: 0.25,
-    height: 1.43,
-    color: lightColorScheme.onSurface,
-  );
-
-  static TextStyle labelLarge = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.1,
-    height: 1.43,
-    color: lightColorScheme.onSurface,
-  );
-
-  /// 卡片装饰
-  static BoxDecoration cardDecoration = BoxDecoration(
-    color: lightColorScheme.surface,
-    borderRadius: BorderRadius.circular(16),
-    border: Border.all(
-      color: lightColorScheme.outline.withAlpha(128),
-      width: 0.5,
+    displayMedium: TextStyle(
+      fontSize: 45,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
+      height: 1.16,
     ),
-    boxShadow: elevation1,
+    titleLarge: TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
+      height: 1.27,
+    ),
+    titleMedium: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      height: 1.5,
+    ),
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.5,
+      height: 1.5,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.25,
+      height: 1.43,
+    ),
+    labelLarge: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      height: 1.43,
+    ),
   );
+}
 
-  /// 获取状态颜色
-  static Color getStatusColor(String status) {
+/// 主题扩展
+extension AppThemeExtension on ThemeData {
+  Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'running':
-        return success;
+        return AppTheme.success;
       case 'warning':
-        return warning;
+        return AppTheme.warning;
       case 'error':
-        return lightColorScheme.error;
+        return colorScheme.error;
       default:
-        return lightColorScheme.onSurface;
+        return colorScheme.onSurface;
     }
   }
+
+  BoxDecoration get cardDecoration => BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outline.withAlpha(128),
+          width: 0.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withAlpha(13),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
+          ),
+        ],
+      );
 }

@@ -21,7 +21,7 @@ class BaseBlock extends StatelessWidget {
       constraints: const BoxConstraints(
         minHeight: double.infinity,
       ),
-      decoration: AppTheme.cardDecoration,
+      decoration: Theme.of(context).cardDecoration,
       clipBehavior: Clip.antiAlias,
       child: Padding(
         padding: const EdgeInsets.all(16.0),

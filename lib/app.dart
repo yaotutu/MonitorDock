@@ -10,14 +10,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: AppTheme.lightColorScheme,
-        dividerTheme: DividerThemeData(
-          color: AppTheme.lightColorScheme.outline.withAlpha(128),
-          thickness: 0.5,
-        ),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system, // 跟随系统主题
       home: const ScrollableBlocksView(),
     );
   }
