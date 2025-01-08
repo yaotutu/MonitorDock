@@ -17,7 +17,8 @@ class _ClockBlockState extends State<ClockBlock> {
   @override
   void initState() {
     super.initState();
-    _controller = ClockController()..startTimer();
+    _controller = ClockController();
+    _controller.startTimer();
   }
 
   @override
@@ -32,7 +33,7 @@ class _ClockBlockState extends State<ClockBlock> {
       overflowMode: BlockOverflowMode.clip,
       child: ListenableBuilder(
         listenable: _controller,
-        builder: (context, _) {
+        builder: (context, child) {
           return ClockDisplay(time: _controller.currentTime);
         },
       ),

@@ -41,7 +41,7 @@ class ClockDisplay extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '${_getWeekDay(time.weekday)}, ${_getMonth(time.month)} ${time.day}',
+            '${_weekdays[time.weekday]}, ${time.month}月 ${time.day}日',
             style: textTheme.titleMedium?.copyWith(
               color: colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w400,
@@ -52,55 +52,13 @@ class ClockDisplay extends StatelessWidget {
     );
   }
 
-  String _getWeekDay(int weekday) {
-    switch (weekday) {
-      case 1:
-        return '星期一';
-      case 2:
-        return '星期二';
-      case 3:
-        return '星期三';
-      case 4:
-        return '星期四';
-      case 5:
-        return '星期五';
-      case 6:
-        return '星期六';
-      case 7:
-        return '星期日';
-      default:
-        return '';
-    }
-  }
-
-  String _getMonth(int month) {
-    switch (month) {
-      case 1:
-        return '1月';
-      case 2:
-        return '2月';
-      case 3:
-        return '3月';
-      case 4:
-        return '4月';
-      case 5:
-        return '5月';
-      case 6:
-        return '6月';
-      case 7:
-        return '7月';
-      case 8:
-        return '8月';
-      case 9:
-        return '9月';
-      case 10:
-        return '10月';
-      case 11:
-        return '11月';
-      case 12:
-        return '12月';
-      default:
-        return '';
-    }
-  }
+  static const _weekdays = {
+    1: '星期一',
+    2: '星期二',
+    3: '星期三',
+    4: '星期四',
+    5: '星期五',
+    6: '星期六',
+    7: '星期日',
+  };
 }
