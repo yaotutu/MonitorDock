@@ -153,20 +153,20 @@ class _TrafficChartPainter extends CustomPainter {
     }
 
     final uploadPaint = Paint()
-      ..color = uploadColor.withOpacity(isDark ? 0.25 : 0.15)
+      ..color = uploadColor.withAlpha((isDark ? 64 : 38))
       ..style = PaintingStyle.fill;
 
     final downloadPaint = Paint()
-      ..color = downloadColor.withOpacity(isDark ? 0.25 : 0.15)
+      ..color = downloadColor.withAlpha((isDark ? 64 : 38))
       ..style = PaintingStyle.fill;
 
     final uploadLinePaint = Paint()
-      ..color = uploadColor.withOpacity(0.8)
+      ..color = uploadColor.withAlpha(204)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
     final downloadLinePaint = Paint()
-      ..color = downloadColor.withOpacity(0.8)
+      ..color = downloadColor.withAlpha(204)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
