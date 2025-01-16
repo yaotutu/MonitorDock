@@ -22,8 +22,8 @@ class HomeView extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: const [
-                    ClockBlock(),
-                    SizedBox(width: 16),
+                    // ClockBlock(),
+                    // SizedBox(width: 16),
                     ClashBlock(),
                     SizedBox(width: 16),
                   ],

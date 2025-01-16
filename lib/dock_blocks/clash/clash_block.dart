@@ -133,10 +133,6 @@ class _ClashBlockState extends State<ClashBlock> {
             const CircularProgressIndicator.adaptive()
           else ...[
             if (_traffic != null) _buildTraffic(),
-            if (_memory != null) ...[
-              const SizedBox(height: 16),
-              _buildMemory(),
-            ],
             if (_connections != null && _connections!.isNotEmpty) ...[
               const SizedBox(height: 16),
               _buildConnections(),
@@ -167,47 +163,45 @@ class _ClashBlockState extends State<ClashBlock> {
     final traffic = _traffic!;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Column(
-      children: [
-        _buildStatusItem(
-          icon: Icons.upload_outlined,
-          label: '上传',
-          value: traffic.upSpeed,
-          valueColor: colorScheme.primary,
-        ),
-        const SizedBox(height: 8),
-        _buildStatusItem(
-          icon: Icons.download_outlined,
-          label: '下载',
-          value: traffic.downSpeed,
-          valueColor: colorScheme.secondary,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMemory() {
-    final memory = _memory!;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Column(
-      children: [
-        _buildStatusItem(
-          icon: Icons.memory_outlined,
-          label: '内存',
-          value: memory.usageString,
-          valueColor: colorScheme.tertiary,
-        ),
-        const SizedBox(height: 4),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(2),
-          child: LinearProgressIndicator(
-            value: memory.usagePercentage,
-            backgroundColor: colorScheme.surfaceVariant,
-            valueColor: AlwaysStoppedAnimation(colorScheme.tertiary),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          // 上传
+          Icon(
+            Icons.upload_outlined,
+            size: 16,
+            color: colorScheme.primary,
           ),
-        ),
-      ],
+          const SizedBox(width: 4),
+          Text(
+            traffic.upSpeed,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+          const SizedBox(width: 16),
+          // 下载
+          Icon(
+            Icons.download_outlined,
+            size: 16,
+            color: colorScheme.secondary,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            traffic.downSpeed,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.secondary,
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -323,36 +317,6 @@ class _ClashBlockState extends State<ClashBlock> {
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusItem({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color valueColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 16),
-          const SizedBox(width: 8),
-          Text(label),
-          const Spacer(),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: valueColor,
-                  fontWeight: FontWeight.w500,
-                ),
           ),
         ],
       ),
