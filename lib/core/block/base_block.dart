@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/app_theme.dart';
 
 /// 内容适配模式
 enum ContentFitMode {
@@ -19,6 +18,8 @@ class BaseBlock extends StatelessWidget {
   final double width;
   final double? height;
   final EdgeInsetsGeometry padding;
+  final Color? backgroundColor;
+  final Color? borderColor;
 
   const BaseBlock({
     super.key,
@@ -27,17 +28,36 @@ class BaseBlock extends StatelessWidget {
     this.width = 320,
     this.height,
     this.padding = const EdgeInsets.all(16.0),
+    this.backgroundColor,
+    this.borderColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+
     return Container(
       width: width,
       height: height,
       constraints: const BoxConstraints(
-        minHeight: 100, // 设置最小高度以确保始终有显示空间
+        minHeight: 100,
       ),
-      decoration: Theme.of(context).cardDecoration,
+      decoration: BoxDecoration(
+        color: backgroundColor ??
+            (isDark ? const Color(0xFF1E1E1E) : Colors.white),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: borderColor ?? (isDark ? Colors.white24 : Colors.black12),
+          width: 0.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: (isDark ? Colors.black26 : Colors.black12).withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       clipBehavior: Clip.antiAlias,
       child: _buildContent(),
     );
