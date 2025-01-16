@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../../dock_blocks/clock/clock_block.dart';
 import '../../dock_blocks/clash/clash_block.dart';
+import '../../dock_blocks/demo/demo_block.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -28,6 +29,8 @@ class HomeView extends StatelessWidget {
                       baseUrl: 'ws://192.168.55.212:9999',
                       token: '',
                     ),
+                    SizedBox(width: 16),
+                    DemoBlock(),
                     SizedBox(width: 16),
                   ],
                 ),
