@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../core/block/base_block.dart';
 import 'clock_controller.dart';
 import 'clock_display.dart';
@@ -29,10 +29,10 @@ class _ClockBlockState extends State<ClockBlock> {
   @override
   Widget build(BuildContext context) {
     return BaseBlock(
-      child: ListenableBuilder(
-        listenable: _controller,
-        builder: (context, child) {
-          return ClockDisplay(time: _controller.currentTime);
+      child: ValueListenableBuilder<DateTime>(
+        valueListenable: _controller,
+        builder: (context, time, child) {
+          return ClockDisplay(time: time);
         },
       ),
     );

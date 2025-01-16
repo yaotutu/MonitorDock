@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class ClockDisplay extends StatelessWidget {
   final DateTime time;
@@ -7,8 +7,8 @@ class ClockDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final theme = CupertinoTheme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Center(
       child: Column(
@@ -21,20 +21,24 @@ class ClockDisplay extends StatelessWidget {
             children: [
               Text(
                 '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}',
-                style: textTheme.displayLarge?.copyWith(
+                style: const TextStyle(
+                  fontFamily: '.SF Pro Display',
                   fontSize: 72,
                   fontWeight: FontWeight.w300,
                   letterSpacing: -2,
-                  color: colorScheme.onSurface,
                   height: 1,
                 ),
               ),
               const SizedBox(width: 8),
               Text(
                 time.second.toString().padLeft(2, '0'),
-                style: textTheme.headlineMedium?.copyWith(
+                style: TextStyle(
+                  fontFamily: '.SF Pro Display',
+                  fontSize: 32,
                   fontWeight: FontWeight.w300,
-                  color: colorScheme.onSurfaceVariant,
+                  color: isDark
+                      ? CupertinoColors.systemGrey
+                      : CupertinoColors.systemGrey2,
                 ),
               ),
             ],
@@ -42,9 +46,13 @@ class ClockDisplay extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             '${_weekdays[time.weekday]}, ${time.month}月 ${time.day}日',
-            style: textTheme.titleMedium?.copyWith(
-              color: colorScheme.onSurfaceVariant,
+            style: TextStyle(
+              fontFamily: '.SF Pro Text',
+              fontSize: 17,
               fontWeight: FontWeight.w400,
+              color: isDark
+                  ? CupertinoColors.systemGrey
+                  : CupertinoColors.systemGrey2,
             ),
           ),
         ],

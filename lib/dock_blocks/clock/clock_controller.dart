@@ -1,17 +1,15 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-class ClockController extends ChangeNotifier {
-  DateTime _currentTime = DateTime.now();
+class ClockController extends ValueNotifier<DateTime> {
   Timer? _timer;
 
-  DateTime get currentTime => _currentTime;
+  ClockController() : super(DateTime.now());
 
   void startTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      _currentTime = DateTime.now();
-      notifyListeners();
+      value = DateTime.now();
     });
   }
 

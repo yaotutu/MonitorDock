@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../core/block/base_block.dart';
 import '../../core/theme/app_theme.dart';
@@ -102,12 +102,12 @@ class _ClashBlockState extends State<ClashBlock> {
       return const BaseBlock(
         width: AppMetrics.defaultBlockWidth,
         child: Center(
-          child: CircularProgressIndicator.adaptive(),
+          child: CupertinoActivityIndicator(),
         ),
       );
     }
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = CupertinoTheme.brightnessOf(context) == Brightness.dark;
 
     return BaseBlock(
       width: AppMetrics.defaultBlockWidth,
@@ -119,14 +119,20 @@ class _ClashBlockState extends State<ClashBlock> {
           Row(
             children: [
               Icon(
-                Icons.speed_rounded,
+                CupertinoIcons.speedometer,
                 size: AppMetrics.iconSizes.medium,
-                color: AppColors.primary,
+                color: CupertinoColors.systemBlue,
               ),
               SizedBox(width: AppMetrics.spacing.small),
               Text(
                 '网络流量',
-                style: AppTypography.title(isDark: isDark),
+                style: TextStyle(
+                  fontFamily: '.SF Pro Display',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.4,
+                  color: isDark ? CupertinoColors.white : CupertinoColors.black,
+                ),
               ),
             ],
           ),
@@ -136,18 +142,18 @@ class _ClashBlockState extends State<ClashBlock> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SpeedCard(
-                icon: Icons.upload_rounded,
+                icon: CupertinoIcons.arrow_up,
                 label: '上传',
                 speed: formatSpeed(_traffic!.upload),
                 total: formatBytes(_traffic!.uploadTotal),
-                color: AppColors.primary,
+                color: CupertinoColors.systemBlue,
               ),
               SpeedCard(
-                icon: Icons.download_rounded,
+                icon: CupertinoIcons.arrow_down,
                 label: '下载',
                 speed: formatSpeed(_traffic!.download),
                 total: formatBytes(_traffic!.downloadTotal),
-                color: AppColors.secondary,
+                color: CupertinoColors.systemIndigo,
               ),
             ],
           ),

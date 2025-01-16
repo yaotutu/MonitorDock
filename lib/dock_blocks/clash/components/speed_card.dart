@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../../core/theme/app_theme.dart';
 
 class SpeedCard extends StatelessWidget {
@@ -19,7 +19,7 @@ class SpeedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = CupertinoTheme.brightnessOf(context) == Brightness.dark;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -47,20 +47,38 @@ class SpeedCard extends StatelessWidget {
               SizedBox(width: AppMetrics.spacing.tiny),
               Text(
                 label,
-                style: AppTypography.label(isDark: isDark),
+                style: TextStyle(
+                  fontFamily: '.SF Pro Text',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: isDark
+                      ? CupertinoColors.systemGrey
+                      : CupertinoColors.systemGrey2,
+                ),
               ),
             ],
           ),
           SizedBox(height: AppMetrics.spacing.tiny),
           Text(
             speed,
-            style: AppTypography.subtitle(isDark: isDark).copyWith(
+            style: TextStyle(
+              fontFamily: '.SF Pro Display',
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.4,
               color: color,
             ),
           ),
           Text(
             '总计: $total',
-            style: AppTypography.small(isDark: isDark),
+            style: TextStyle(
+              fontFamily: '.SF Pro Text',
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              color: isDark
+                  ? CupertinoColors.systemGrey
+                  : CupertinoColors.systemGrey2,
+            ),
           ),
         ],
       ),

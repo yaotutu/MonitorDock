@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'dart:ui';
 import '../theme/app_theme.dart';
 
@@ -36,7 +36,7 @@ class BaseBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    final isDark = CupertinoTheme.brightnessOf(context) == Brightness.dark;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppMetrics.blockRadius),

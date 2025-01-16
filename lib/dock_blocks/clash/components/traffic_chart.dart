@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../../../core/theme/app_theme.dart';
 
 class TrafficChart extends StatelessWidget {
@@ -13,7 +13,7 @@ class TrafficChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = CupertinoTheme.brightnessOf(context) == Brightness.dark;
 
     return Column(
       children: [
@@ -22,7 +22,14 @@ class TrafficChart extends StatelessWidget {
           children: [
             Text(
               '实时速度',
-              style: AppTypography.label(isDark: isDark),
+              style: TextStyle(
+                fontFamily: '.SF Pro Text',
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: isDark
+                    ? CupertinoColors.systemGrey
+                    : CupertinoColors.systemGrey2,
+              ),
             ),
             Row(
               children: [
@@ -30,28 +37,42 @@ class TrafficChart extends StatelessWidget {
                   width: AppMetrics.spacing.xs,
                   height: AppMetrics.spacing.xs,
                   decoration: BoxDecoration(
-                    color: AppColors.primary,
+                    color: CupertinoColors.systemBlue,
                     shape: BoxShape.circle,
                   ),
                 ),
                 SizedBox(width: AppMetrics.spacing.tiny),
                 Text(
                   '上传',
-                  style: AppTypography.label(isDark: isDark),
+                  style: TextStyle(
+                    fontFamily: '.SF Pro Text',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: isDark
+                        ? CupertinoColors.systemGrey
+                        : CupertinoColors.systemGrey2,
+                  ),
                 ),
                 SizedBox(width: AppMetrics.spacing.medium),
                 Container(
                   width: AppMetrics.spacing.xs,
                   height: AppMetrics.spacing.xs,
                   decoration: BoxDecoration(
-                    color: AppColors.secondary,
+                    color: CupertinoColors.systemIndigo,
                     shape: BoxShape.circle,
                   ),
                 ),
                 SizedBox(width: AppMetrics.spacing.tiny),
                 Text(
                   '下载',
-                  style: AppTypography.label(isDark: isDark),
+                  style: TextStyle(
+                    fontFamily: '.SF Pro Text',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: isDark
+                        ? CupertinoColors.systemGrey
+                        : CupertinoColors.systemGrey2,
+                  ),
                 ),
               ],
             ),
@@ -74,8 +95,8 @@ class TrafficChart extends StatelessWidget {
             painter: _TrafficChartPainter(
               uploadHistory: uploadHistory,
               downloadHistory: downloadHistory,
-              uploadColor: AppColors.primary,
-              downloadColor: AppColors.secondary,
+              uploadColor: CupertinoColors.systemBlue,
+              downloadColor: CupertinoColors.systemIndigo,
               gridColor: AppColors.getBorderColor(isDark),
               isDark: isDark,
             ),
