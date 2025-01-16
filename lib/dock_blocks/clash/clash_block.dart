@@ -111,7 +111,7 @@ class _ClashBlockState extends State<ClashBlock> {
   @override
   Widget build(BuildContext context) {
     return BaseBlock(
-      overflowMode: BlockOverflowMode.clip,
+      contentFit: ContentFitMode.scroll,
       width: 400,
       child: Column(
         mainAxisSize: MainAxisSize.min,

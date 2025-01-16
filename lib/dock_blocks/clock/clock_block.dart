@@ -30,7 +30,6 @@ class _ClockBlockState extends State<ClockBlock> {
   @override
   Widget build(BuildContext context) {
     return BaseBlock(
-      overflowMode: BlockOverflowMode.clip,
       child: ListenableBuilder(
         listenable: _controller,
         builder: (context, child) {
