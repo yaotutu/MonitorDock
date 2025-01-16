@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../dock_blocks/clock/clock_block.dart';
-import '../../dock_blocks/server_status/server_status_block.dart';
+import '../../dock_blocks/clash/clash_block.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -24,7 +24,7 @@ class HomeView extends StatelessWidget {
                   children: const [
                     ClockBlock(),
                     SizedBox(width: 16),
-                    ServerStatusBlock(),
+                    ClashBlock(),
                     SizedBox(width: 16),
                   ],
                 ),
