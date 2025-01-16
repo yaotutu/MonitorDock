@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import 'block/clock/clock_block.dart';
-import 'block/server_status/server_status_block.dart';
+import '../../dock_blocks/clock/clock_block.dart';
+import '../../dock_blocks/server_status/server_status_block.dart';
 
-class ScrollableBlocksView extends StatelessWidget {
-  const ScrollableBlocksView({super.key});
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.lightColorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(

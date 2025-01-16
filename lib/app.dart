@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
-import 'widgets/scrollable_blocks_view.dart';
+import 'features/home/home_view.dart';
 
 /// 应用程序根组件
 class App extends StatelessWidget {
@@ -13,7 +13,7 @@ class App extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system, // 跟随系统主题
-      home: const ScrollableBlocksView(),
+      home: const HomeView(),
     );
   }
 }

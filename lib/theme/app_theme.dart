@@ -1,5 +1,37 @@
 import 'package:flutter/material.dart';
 
+/// 主题扩展
+extension AppThemeExtension on ThemeData {
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'running':
+        return AppTheme.success;
+      case 'warning':
+        return AppTheme.warning;
+      case 'error':
+        return colorScheme.error;
+      default:
+        return colorScheme.onSurface;
+    }
+  }
+
+  BoxDecoration get cardDecoration => BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: colorScheme.outline.withAlpha(128),
+          width: 0.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withAlpha(13),
+            offset: const Offset(0, 1),
+            blurRadius: 3,
+          ),
+        ],
+      );
+}
+
 /// Material Design 3 主题配置
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
@@ -167,36 +199,4 @@ class AppTheme {
       height: 1.43,
     ),
   );
-}
-
-/// 主题扩展
-extension AppThemeExtension on ThemeData {
-  Color getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'running':
-        return AppTheme.success;
-      case 'warning':
-        return AppTheme.warning;
-      case 'error':
-        return colorScheme.error;
-      default:
-        return colorScheme.onSurface;
-    }
-  }
-
-  BoxDecoration get cardDecoration => BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: colorScheme.outline.withAlpha(128),
-          width: 0.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withAlpha(13),
-            offset: const Offset(0, 1),
-            blurRadius: 3,
-          ),
-        ],
-      );
 }

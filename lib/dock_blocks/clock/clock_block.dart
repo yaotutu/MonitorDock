@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../base/base_block.dart';
-import '../base/block_overflow.dart';
+import '../../core/block/base_block.dart';
+import '../../core/block/block_overflow.dart';
 import 'clock_controller.dart';
 import 'clock_display.dart';
 

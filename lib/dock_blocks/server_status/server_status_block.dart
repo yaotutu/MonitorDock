@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../base/base_block.dart';
-import '../base/block_overflow.dart';
+import '../../core/block/base_block.dart';
+import '../../core/block/block_overflow.dart';
 import 'models/server_status.dart';
 import 'server_status_service.dart';
 import 'status_item.dart';
