@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/block/base_block.dart';
-import '../../core/block/block_overflow.dart';
 import 'models/clash_status.dart';
 import 'models/clash_connection.dart';
 import 'services/clash_service.dart';
@@ -28,6 +27,11 @@ class _ClashBlockState extends State<ClashBlock> {
   List<ClashConnection>? _connections;
   bool _isConnected = false;
   String? _error;
+
+  static const primaryColor = Color(0xFF6750A4);
+  static const secondaryColor = Color(0xFF625B71);
+  static const errorColor = Color(0xFFB3261E);
+  static const surfaceColor = Color(0xFF1C1B1F);
 
   @override
   void initState() {
@@ -110,6 +114,8 @@ class _ClashBlockState extends State<ClashBlock> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+
     return BaseBlock(
       contentFit: ContentFitMode.scroll,
       width: 400,
@@ -123,9 +129,10 @@ class _ClashBlockState extends State<ClashBlock> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 _error!,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                style: TextStyle(
+                  color: errorColor,
+                  fontSize: 14,
+                ),
                 textAlign: TextAlign.center,
               ),
             )
@@ -148,12 +155,18 @@ class _ClashBlockState extends State<ClashBlock> {
       children: [
         Icon(
           Icons.router_outlined,
-          color: Theme.of(context).colorScheme.primary,
+          color: primaryColor,
         ),
         const SizedBox(width: 8),
         Text(
           'Clash',
-          style: Theme.of(context).textTheme.titleMedium,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: MediaQuery.platformBrightnessOf(context) == Brightness.dark
+                ? Colors.white
+                : surfaceColor,
+          ),
         ),
       ],
     );
@@ -161,44 +174,44 @@ class _ClashBlockState extends State<ClashBlock> {
 
   Widget _buildTraffic() {
     final traffic = _traffic!;
-    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
+        color: isDark ? Colors.white10 : Colors.black.withOpacity(0.05),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          // 上传
           Icon(
             Icons.upload_outlined,
             size: 16,
-            color: colorScheme.primary,
+            color: primaryColor,
           ),
           const SizedBox(width: 4),
           Text(
             traffic.upSpeed,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.primary,
-                  fontWeight: FontWeight.w500,
-                ),
+            style: TextStyle(
+              color: primaryColor,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(width: 16),
-          // 下载
           Icon(
             Icons.download_outlined,
             size: 16,
-            color: colorScheme.secondary,
+            color: secondaryColor,
           ),
           const SizedBox(width: 4),
           Text(
             traffic.downSpeed,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.secondary,
-                  fontWeight: FontWeight.w500,
-                ),
+            style: TextStyle(
+              color: secondaryColor,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
         ],
       ),
@@ -207,7 +220,7 @@ class _ClashBlockState extends State<ClashBlock> {
 
   Widget _buildConnections() {
     final connections = _connections!.take(5).toList();
-    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,9 +229,11 @@ class _ClashBlockState extends State<ClashBlock> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             '活跃连接',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: colorScheme.primary,
-                ),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: primaryColor,
+            ),
           ),
         ),
         const SizedBox(height: 8),
@@ -228,13 +243,14 @@ class _ClashBlockState extends State<ClashBlock> {
   }
 
   Widget _buildConnectionItem(ClashConnection connection) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    final textColor = isDark ? Colors.white : surfaceColor;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
+        color: isDark ? Colors.white10 : Colors.black.withOpacity(0.05),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -248,17 +264,20 @@ class _ClashBlockState extends State<ClashBlock> {
                   children: [
                     Text(
                       connection.host,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: textColor,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 2),
                     Text(
                       connection.chainString,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: textColor.withOpacity(0.7),
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -267,10 +286,11 @@ class _ClashBlockState extends State<ClashBlock> {
               const SizedBox(width: 8),
               Text(
                 connection.totalTraffic,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: TextStyle(
+                  color: primaryColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -280,40 +300,44 @@ class _ClashBlockState extends State<ClashBlock> {
               Icon(
                 Icons.upload_outlined,
                 size: 14,
-                color: colorScheme.onSurfaceVariant,
+                color: textColor.withOpacity(0.7),
               ),
               const SizedBox(width: 4),
               Text(
                 connection.uploadSpeed,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: textColor.withOpacity(0.7),
+                ),
               ),
               const SizedBox(width: 12),
               Icon(
                 Icons.download_outlined,
                 size: 14,
-                color: colorScheme.onSurfaceVariant,
+                color: textColor.withOpacity(0.7),
               ),
               const SizedBox(width: 4),
               Text(
                 connection.downloadSpeed,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: textColor.withOpacity(0.7),
+                ),
               ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: colorScheme.secondaryContainer,
+                  color:
+                      isDark ? Colors.white24 : Colors.black.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   '${connection.type} | ${connection.rule}',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onSecondaryContainer,
-                      ),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: textColor,
+                  ),
                 ),
               ),
             ],
