@@ -1,65 +1,80 @@
 class ClashConnection {
   final String id;
-  final String host;
-  final String destinationIP;
   final String sourceIP;
-  final String network;
-  final String type;
+  final String host;
   final int upload;
   final int download;
-  final List<String> chains;
-  final String rule;
-  final String rulePayload;
-  final DateTime startTime;
+  final DateTime start;
+
+  // 用于计算速度的字段
+  int? _lastUpload;
+  int? _lastDownload;
+  DateTime? _lastUpdateTime;
+  double uploadSpeed = 0;
+  double downloadSpeed = 0;
 
   ClashConnection({
     required this.id,
-    required this.host,
-    required this.destinationIP,
     required this.sourceIP,
-    required this.network,
-    required this.type,
+    required this.host,
     required this.upload,
     required this.download,
-    required this.chains,
-    required this.rule,
-    required this.rulePayload,
-    required this.startTime,
+    required this.start,
   });
 
   factory ClashConnection.fromJson(Map<String, dynamic> json) {
-    final metadata = json['metadata'] as Map<String, dynamic>;
     return ClashConnection(
-      id: json['id']?.toString() ?? '',
-      host: metadata['host']?.toString() ?? 'Unknown',
-      destinationIP: metadata['destinationIP']?.toString() ?? '',
-      sourceIP: metadata['sourceIP']?.toString() ?? '',
-      network: metadata['network']?.toString() ?? 'Unknown',
-      type: metadata['type']?.toString() ?? 'Unknown',
-      upload: (json['upload'] as num?)?.toInt() ?? 0,
-      download: (json['download'] as num?)?.toInt() ?? 0,
-      chains: (json['chains'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          [],
-      rule: json['rule']?.toString() ?? 'Unknown',
-      rulePayload: json['rulePayload']?.toString() ?? '',
-      startTime:
-          DateTime.tryParse(json['start']?.toString() ?? '') ?? DateTime.now(),
+      id: json['id'] as String,
+      sourceIP: json['metadata']['sourceIP'] as String,
+      host: json['metadata']['host'] as String,
+      upload: json['upload'] as int,
+      download: json['download'] as int,
+      start: DateTime.parse(json['start'] as String),
     );
   }
 
-  String get totalTraffic => _formatBytes(upload + download);
-  String get uploadSpeed => _formatBytes(upload);
-  String get downloadSpeed => _formatBytes(download);
-  String get chainString => chains.join(' → ');
+  void updateSpeed(ClashConnection lastConn) {
+    final now = DateTime.now();
+    if (lastConn._lastUpdateTime != null) {
+      final timeDiff = now.difference(lastConn._lastUpdateTime!).inMilliseconds;
+      if (timeDiff > 0) {
+        // 计算上传和下载的字节差
+        final uploadDiff = upload - (lastConn._lastUpload ?? upload);
+        final downloadDiff = download - (lastConn._lastDownload ?? download);
 
-  static String _formatBytes(int bytes) {
-    if (bytes < 1024) return '$bytes B';
-    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
-    if (bytes < 1024 * 1024 * 1024) {
-      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+        // 转换为每秒的速度 (bytes/s)
+        uploadSpeed = (uploadDiff * 1000 / timeDiff).abs();
+        downloadSpeed = (downloadDiff * 1000 / timeDiff).abs();
+      }
     }
-    return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
+
+    _lastUpload = upload;
+    _lastDownload = download;
+    _lastUpdateTime = now;
+  }
+}
+
+class ClashTrafficData {
+  final int downloadTotal;
+  final int uploadTotal;
+  final List<ClashConnection> connections;
+  final int memory;
+
+  ClashTrafficData({
+    required this.downloadTotal,
+    required this.uploadTotal,
+    required this.connections,
+    required this.memory,
+  });
+
+  factory ClashTrafficData.fromJson(Map<String, dynamic> json) {
+    return ClashTrafficData(
+      downloadTotal: json['downloadTotal'] as int,
+      uploadTotal: json['uploadTotal'] as int,
+      connections: (json['connections'] as List)
+          .map((e) => ClashConnection.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      memory: json['memory'] as int,
+    );
   }
 }

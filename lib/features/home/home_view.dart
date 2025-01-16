@@ -22,9 +22,12 @@ class HomeView extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: const [
-                    // ClockBlock(),
-                    // SizedBox(width: 16),
-                    ClashBlock(),
+                    ClockBlock(),
+                    SizedBox(width: 16),
+                    ClashBlock(
+                      baseUrl: 'ws://192.168.55.212:9999',
+                      token: '',
+                    ),
                     SizedBox(width: 16),
                   ],
                 ),

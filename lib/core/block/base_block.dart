@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
+import '../theme/app_theme.dart';
 
 /// 内容适配模式
 enum ContentFitMode {
@@ -25,9 +27,9 @@ class BaseBlock extends StatelessWidget {
     super.key,
     required this.child,
     this.contentFit = ContentFitMode.scroll,
-    this.width = 320,
+    this.width = AppMetrics.defaultBlockWidth,
     this.height,
-    this.padding = const EdgeInsets.all(16.0),
+    this.padding = const EdgeInsets.all(AppMetrics.blockPadding),
     this.backgroundColor,
     this.borderColor,
   });
@@ -36,30 +38,31 @@ class BaseBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
 
-    return Container(
-      width: width,
-      height: height,
-      constraints: const BoxConstraints(
-        minHeight: 100,
-      ),
-      decoration: BoxDecoration(
-        color: backgroundColor ??
-            (isDark ? const Color(0xFF1E1E1E) : Colors.white),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: borderColor ?? (isDark ? Colors.white24 : Colors.black12),
-          width: 0.5,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppMetrics.blockRadius),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: AppMetrics.blurRadius,
+          sigmaY: AppMetrics.blurRadius,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: (isDark ? Colors.black26 : Colors.black12).withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+        child: Container(
+          width: width,
+          height: height,
+          constraints: const BoxConstraints(
+            minHeight: AppMetrics.minBlockHeight,
           ),
-        ],
+          decoration: BoxDecoration(
+            color: backgroundColor ?? AppColors.getContainerColor(isDark),
+            borderRadius: BorderRadius.circular(AppMetrics.blockRadius),
+            border: Border.all(
+              color: borderColor ?? AppColors.getBorderColor(isDark),
+              width: AppMetrics.borderWidth,
+            ),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: _buildContent(),
+        ),
       ),
-      clipBehavior: Clip.antiAlias,
-      child: _buildContent(),
     );
   }
 
@@ -67,6 +70,9 @@ class BaseBlock extends StatelessWidget {
     switch (contentFit) {
       case ContentFitMode.scroll:
         return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
           child: Padding(
             padding: padding,
             child: child,
