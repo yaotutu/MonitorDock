@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../core/block/base_block.dart';
+import '../../core/components/common_webview.dart';
 import '../../core/theme/app_theme.dart';
 import 'components/speed_card.dart';
 import 'components/traffic_chart.dart';
@@ -108,9 +109,13 @@ class _ClashBlockState extends State<ClashBlock> {
     }
 
     final isDark = CupertinoTheme.brightnessOf(context) == Brightness.dark;
+    final webUiUrl = "http://192.168.55.212:9999/ui/";
 
     return BaseBlock(
       width: AppMetrics.defaultBlockWidth,
+      expandedContent: CommonWebView(
+        url: webUiUrl,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -30,8 +30,8 @@ class HomeView extends StatelessWidget {
                       token: '',
                     ),
                     SizedBox(width: 16),
-                    DemoBlock(),
-                    SizedBox(width: 16),
+                    // DemoBlock(),
+                    // SizedBox(width: 16),
                   ],
                 ),
               );
