@@ -64,40 +64,35 @@ class _DemoBlockState extends State<DemoBlock> {
       child: SizedBox(
         width: AppMetrics.defaultBlockWidth * 1.2,
         height: 500,
-        child: Column(
-          children: [
-            // WebView
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Container(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(AppMetrics.containerRadius),
-                      border: Border.all(
-                        color: AppColors.getBorderColor(isDark),
-                        width: AppMetrics.borderWidth,
+        child: Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(AppMetrics.containerRadius),
+                  border: Border.all(
+                    color: AppColors.getBorderColor(isDark),
+                    width: AppMetrics.borderWidth,
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Stack(
+                  children: [
+                    SizedBox.expand(
+                      child: WebViewWidget(controller: _controller),
+                    ),
+                    if (_isLoading)
+                      const Center(
+                        child: CupertinoActivityIndicator(),
                       ),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Stack(
-                      children: [
-                        SizedBox.expand(
-                          child: WebViewWidget(controller: _controller),
-                        ),
-                        if (_isLoading)
-                          const Center(
-                            child: CupertinoActivityIndicator(),
-                          ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
