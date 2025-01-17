@@ -66,33 +66,6 @@ class _DemoBlockState extends State<DemoBlock> {
         height: 500,
         child: Column(
           children: [
-            // 标题
-            Container(
-              padding: EdgeInsets.all(AppMetrics.blockPadding),
-              width: double.infinity,
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.globe,
-                    size: AppMetrics.iconSizes.medium,
-                    color: CupertinoColors.systemBlue,
-                  ),
-                  SizedBox(width: AppMetrics.spacing.small),
-                  Text(
-                    'WebView Demo',
-                    style: TextStyle(
-                      fontFamily: '.SF Pro Display',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.4,
-                      color: isDark
-                          ? CupertinoColors.white
-                          : CupertinoColors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             // WebView
             Expanded(
               child: LayoutBuilder(
