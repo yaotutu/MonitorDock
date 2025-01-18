@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import '../../dock_blocks/clock/clock_block.dart';
 import '../../dock_blocks/clash/clash_block.dart';
-import '../../dock_blocks/demo/demo_block.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
+
 import '../theme/app_theme.dart';
 
 /// 内容适配模式
@@ -73,8 +75,7 @@ class BaseBlock extends StatelessWidget {
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color:
-                          AppColors.getContainerColor(isDark).withOpacity(0.8),
+                      color: AppColors.getContainerColor(isDark).withAlpha(204),
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(
                         color: AppColors.getBorderColor(isDark),

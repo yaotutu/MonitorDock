@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+
 import '../../core/block/base_block.dart';
 import '../../core/components/common_webview.dart';
 import '../../core/theme/app_theme.dart';
@@ -18,15 +19,15 @@ class _DemoBlockState extends State<DemoBlock> {
     return BaseBlock(
       width: AppMetrics.defaultBlockWidth * 1.2,
       height: 500,
+      expandedContent: const CommonWebView(
+        url: url,
+      ),
       child: const SizedBox(
         width: AppMetrics.defaultBlockWidth * 1.2,
         height: 500,
         child: CommonWebView(
           url: url,
         ),
-      ),
-      expandedContent: const CommonWebView(
-        url: url,
       ),
     );
   }
