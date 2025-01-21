@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import 'features/home/home_view.dart';
+import 'features/demo/grid_demo_view.dart';
 
 /// 应用程序根组件
 class App extends StatelessWidget {
@@ -8,13 +8,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      debugShowCheckedModeBanner: false,
-      theme: const CupertinoThemeData(
-        brightness: Brightness.light,
-        primaryColor: CupertinoColors.systemBlue,
+    return MaterialApp(
+      title: '网格布局演示',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
-      home: const HomeView(),
+      home: const GridDemoView(),
     );
   }
 }
