@@ -76,7 +76,7 @@ class GridFlow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 获取网格配置
-    final gridConfig = GridMetrics.calculateRecommendedGrid(context);
+    final gridConfig = GridMetrics.getConfiguration(context);
 
     return SingleChildScrollView(
       child: Padding(
@@ -85,6 +85,7 @@ class GridFlow extends StatelessWidget {
           spacing: gridConfig.spacing,
           runSpacing: gridConfig.spacing,
           children: children.map((item) {
+            // 根据组件占用的1x1单位数计算实际尺寸
             return SizedBox(
               width: gridConfig.calculateWidth(item.columnSpan),
               height: gridConfig.calculateHeight(item.rowSpan),
@@ -94,6 +95,74 @@ class GridFlow extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// 网格参考线浮层
+class GridLinesOverlay extends StatelessWidget {
+  final GridConfiguration config;
+
+  const GridLinesOverlay({
+    super.key,
+    required this.config,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: GridLinesPainter(
+        config: config,
+        color: Colors.blue.withOpacity(0.1),
+      ),
+    );
+  }
+}
+
+/// 网格线绘制器
+class GridLinesPainter extends CustomPainter {
+  final GridConfiguration config;
+  final Color color;
+
+  GridLinesPainter({
+    required this.config,
+    required this.color,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    final cellSize = config.cellSize;
+    final spacing = config.spacing;
+    final edgeInsets = config.edgeInsets;
+
+    // 绘制垂直线
+    for (int i = 0; i <= config.columnCount; i++) {
+      final x = edgeInsets + i * (cellSize + spacing);
+      canvas.drawLine(
+        Offset(x, edgeInsets),
+        Offset(x, size.height - edgeInsets),
+        paint,
+      );
+    }
+
+    // 绘制水平线
+    for (int i = 0; i <= config.rowCount; i++) {
+      final y = edgeInsets + i * (cellSize + spacing);
+      canvas.drawLine(
+        Offset(edgeInsets, y),
+        Offset(size.width - edgeInsets, y),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant GridLinesPainter oldDelegate) {
+    return oldDelegate.config != config || oldDelegate.color != color;
   }
 }
 

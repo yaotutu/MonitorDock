@@ -1,114 +1,91 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 /// 网格布局度量计算工具
 class GridMetrics {
-  /// 默认的网格列数
+  /// 桌面网格的总列数（横向最多可以放几个1x1的组件）
   static const int defaultColumnCount = 4;
 
-  /// 默认的网格行数
+  /// 桌面网格的总行数（纵向最多可以放几个1x1的组件）
   static const int defaultRowCount = 5;
 
-  /// 默认的网格间距
+  /// 组件之间的间距
   static const double defaultSpacing = 16.0;
 
   /// 边缘间距
   static const double defaultEdgeInsets = 16.0;
 
-  /// 最小的单元格尺寸
-  static const double minCellSize = 56.0;
-
-  /// 最大的单元格尺寸
-  static const double maxCellSize = 120.0;
-
-  /// 计算基准单元格尺寸
+  /// 计算1x1组件的基准尺寸
   ///
-  /// [context] - 构建上下文，用于获取屏幕尺寸
-  /// [columnCount] - 列数，默认为4
-  /// [rowCount] - 行数，默认为5
-  /// [spacing] - 网格间距，默认为16.0
-  /// 返回计算后的单元格尺寸
-  static double calculateBaseCellSize(
-    BuildContext context, {
-    int columnCount = defaultColumnCount,
-    int rowCount = defaultRowCount,
-    double spacing = defaultSpacing,
-  }) {
+  /// 整个屏幕会被划分为 4x5 的网格，每个格子就是一个1x1组件的大小
+  /// 这个方法会计算出每个1x1格子的实际像素尺寸
+  static double calculateBaseUnitSize(BuildContext context) {
     // 获取屏幕尺寸
     final screenSize = MediaQuery.of(context).size;
     final safeArea = MediaQuery.of(context).padding;
 
-    // 计算实际可用空间（减去安全区域和边缘间距）
+    // 计算实际可用宽度（减去安全区域和边缘间距）
     final availableWidth =
         screenSize.width - safeArea.horizontal - (defaultEdgeInsets * 2);
-    final availableHeight =
-        screenSize.height - safeArea.vertical - (defaultEdgeInsets * 2);
 
-    // 计算网格总间距
-    final horizontalSpacingTotal = spacing * (columnCount - 1);
-    final verticalSpacingTotal = spacing * (rowCount - 1);
+    // 计算水平方向的总间距
+    final horizontalSpacingTotal = defaultSpacing * (defaultColumnCount - 1);
 
-    // 计算单元格尺寸
-    final cellWidth = (availableWidth - horizontalSpacingTotal) / columnCount;
-    final cellHeight = (availableHeight - verticalSpacingTotal) / rowCount;
-
-    // 使用较小的尺寸确保单元格是正方形
-    return math.min(cellWidth, cellHeight);
+    // 基于宽度计算1x1的尺寸（宽度优先）
+    // 可用宽度减去所有间距，然后平均分配给4列
+    return (availableWidth - horizontalSpacingTotal) / defaultColumnCount;
   }
 
-  /// 根据屏幕尺寸计算推荐的网格配置
-  ///
-  /// [context] - 构建上下文，用于获取屏幕尺寸
-  /// 返回推荐的网格配置
-  static GridConfiguration calculateRecommendedGrid(BuildContext context) {
-    final cellSize = calculateBaseCellSize(context);
+  /// 获取网格配置
+  static GridConfiguration getConfiguration(BuildContext context) {
+    final baseUnitSize = calculateBaseUnitSize(context);
 
     return GridConfiguration(
-      columnCount: defaultColumnCount,
-      rowCount: defaultRowCount,
-      cellSize: cellSize,
+      columnCount: defaultColumnCount, // 横向4个1x1
+      rowCount: defaultRowCount, // 纵向5个1x1
+      baseUnitSize: baseUnitSize, // 1x1的实际像素尺寸
       spacing: defaultSpacing,
       edgeInsets: defaultEdgeInsets,
-    );
-  }
-
-  /// 计算给定尺寸在当前配置下的实际像素尺寸
-  static Size calculateActualSize(BuildContext context, int columns, int rows) {
-    final config = calculateRecommendedGrid(context);
-    return Size(
-      config.calculateWidth(columns),
-      config.calculateHeight(rows),
     );
   }
 }
 
 /// 网格配置数据类
 class GridConfiguration {
+  /// 横向最多可以放几个1x1的组件
   final int columnCount;
+
+  /// 纵向最多可以放几个1x1的组件
   final int rowCount;
-  final double cellSize;
+
+  /// 1x1组件的实际像素尺寸
+  final double baseUnitSize;
+
+  /// 组件之间的间距
   final double spacing;
+
+  /// 边缘间距
   final double edgeInsets;
 
   const GridConfiguration({
     required this.columnCount,
     required this.rowCount,
-    required this.cellSize,
+    required this.baseUnitSize,
     required this.spacing,
     required this.edgeInsets,
   });
 
-  /// 计算给定尺寸组件的实际宽度（包含间距）
-  double calculateWidth(int columns) {
-    if (columns <= 0) return 0;
-    return columns * cellSize + (columns - 1) * spacing;
+  /// 计算指定宽度（以1x1为单位）的实际像素宽度
+  double calculateWidth(int units) {
+    if (units <= 0) return 0;
+    // 实际宽度 = 单位数 * 基准尺寸 + (单位数-1) * 间距
+    return units * baseUnitSize + (units - 1) * spacing;
   }
 
-  /// 计算给定尺寸组件的实际高度（包含间距）
-  double calculateHeight(int rows) {
-    if (rows <= 0) return 0;
-    return rows * cellSize + (rows - 1) * spacing;
+  /// 计算指定高度（以1x1为单位）的实际像素高度
+  double calculateHeight(int units) {
+    if (units <= 0) return 0;
+    // 实际高度 = 单位数 * 基准尺寸 + (单位数-1) * 间距
+    return units * baseUnitSize + (units - 1) * spacing;
   }
 
   /// 获取网格的总宽度（包含边距）
