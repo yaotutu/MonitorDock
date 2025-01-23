@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 
 /// 网格布局度量计算工具
 class GridMetrics {
-  /// 桌面网格的总列数（横向最多可以放几个1x1的组件）
-  static const int defaultColumnCount = 4;
+  /// 竖屏时的默认列数
+  static const int defaultPortraitColumnCount = 4;
 
-  /// 桌面网格的总行数（纵向最多可以放几个1x1的组件）
-  static const int defaultRowCount = 5;
+  /// 竖屏时的默认行数
+  static const int defaultPortraitRowCount = 5;
+
+  /// 横屏时的默认列数
+  static const int defaultLandscapeColumnCount = 6;
+
+  /// 横屏时的默认行数
+  static const int defaultLandscapeRowCount = 4;
 
   /// 组件之间的间距
   static const double defaultSpacing = 16.0;
@@ -15,34 +21,43 @@ class GridMetrics {
   static const double defaultEdgeInsets = 16.0;
 
   /// 计算1x1组件的基准尺寸
-  ///
-  /// 整个屏幕会被划分为 4x5 的网格，每个格子就是一个1x1组件的大小
-  /// 这个方法会计算出每个1x1格子的实际像素尺寸
   static double calculateBaseUnitSize(BuildContext context) {
-    // 获取屏幕尺寸
+    // 获取屏幕尺寸和方向
     final screenSize = MediaQuery.of(context).size;
     final safeArea = MediaQuery.of(context).padding;
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
 
-    // 计算实际可用宽度（减去安全区域和边缘间距）
+    // 根据屏幕方向选择行列数
+    final columnCount = isPortrait ? defaultPortraitColumnCount : defaultLandscapeColumnCount;
+    final rowCount = isPortrait ? defaultPortraitRowCount : defaultLandscapeRowCount;
+
+    // 计算实际可用宽度和高度（减去安全区域和边缘间距）
     final availableWidth =
         screenSize.width - safeArea.horizontal - (defaultEdgeInsets * 2);
+    final availableHeight =
+        screenSize.height - safeArea.vertical - (defaultEdgeInsets * 2);
 
-    // 计算水平方向的总间距
-    final horizontalSpacingTotal = defaultSpacing * (defaultColumnCount - 1);
+    // 计算水平和垂直方向的总间距
+    final horizontalSpacingTotal = defaultSpacing * (columnCount - 1);
+    final verticalSpacingTotal = defaultSpacing * (rowCount - 1);
 
-    // 基于宽度计算1x1的尺寸（宽度优先）
-    // 可用宽度减去所有间距，然后平均分配给4列
-    return (availableWidth - horizontalSpacingTotal) / defaultColumnCount;
+    // 分别计算基于宽度和高度的单位尺寸
+    final widthBasedSize = (availableWidth - horizontalSpacingTotal) / columnCount;
+    final heightBasedSize = (availableHeight - verticalSpacingTotal) / rowCount;
+
+    // 返回较小的值，确保网格能完整显示
+    return widthBasedSize < heightBasedSize ? widthBasedSize : heightBasedSize;
   }
 
   /// 获取网格配置
   static GridConfiguration getConfiguration(BuildContext context) {
     final baseUnitSize = calculateBaseUnitSize(context);
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return GridConfiguration(
-      columnCount: defaultColumnCount, // 横向4个1x1
-      rowCount: defaultRowCount, // 纵向5个1x1
-      baseUnitSize: baseUnitSize, // 1x1的实际像素尺寸
+      columnCount: isPortrait ? defaultPortraitColumnCount : defaultLandscapeColumnCount,
+      rowCount: isPortrait ? defaultPortraitRowCount : defaultLandscapeRowCount,
+      baseUnitSize: baseUnitSize,
       spacing: defaultSpacing,
       edgeInsets: defaultEdgeInsets,
     );

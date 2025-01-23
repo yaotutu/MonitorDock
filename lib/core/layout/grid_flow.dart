@@ -135,13 +135,13 @@ class GridLinesPainter extends CustomPainter {
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
-    final cellSize = config.cellSize;
+    final baseUnitSize = config.baseUnitSize;
     final spacing = config.spacing;
     final edgeInsets = config.edgeInsets;
 
     // 绘制垂直线
     for (int i = 0; i <= config.columnCount; i++) {
-      final x = edgeInsets + i * (cellSize + spacing);
+      final x = edgeInsets + i * (baseUnitSize + spacing);
       canvas.drawLine(
         Offset(x, edgeInsets),
         Offset(x, size.height - edgeInsets),
@@ -151,7 +151,7 @@ class GridLinesPainter extends CustomPainter {
 
     // 绘制水平线
     for (int i = 0; i <= config.rowCount; i++) {
-      final y = edgeInsets + i * (cellSize + spacing);
+      final y = edgeInsets + i * (baseUnitSize + spacing);
       canvas.drawLine(
         Offset(edgeInsets, y),
         Offset(size.width - edgeInsets, y),
