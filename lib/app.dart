@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'features/demo/grid_demo_view.dart';
+import 'features/demo/block_demo_view.dart';
 
 /// 应用程序根组件
 class App extends StatelessWidget {
@@ -9,12 +9,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '网格布局演示',
+      title: '监控面板演示',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const GridDemoView(),
+      home: const BlockDemoView(),
     );
   }
 }
