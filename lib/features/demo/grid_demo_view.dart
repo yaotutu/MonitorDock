@@ -10,7 +10,7 @@ class GridDemoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 获取推荐的网格配置
-    final gridConfig = GridMetrics.getConfiguration(context);
+    final gridConfig = GridMetrics.calculateRecommendedGrid(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -108,7 +108,7 @@ class GridDemoView extends StatelessWidget {
                     Text(
                       '列数：${gridConfig.columnCount}\n'
                       '行数：${gridConfig.rowCount}\n'
-                      '单元格：${gridConfig.baseUnitSize.toStringAsFixed(1)}px\n'
+                      '单元格：${gridConfig.cellSize.toStringAsFixed(1)}px\n'
                       '间距：${gridConfig.spacing}px',
                       style: const TextStyle(
                         color: Colors.white,

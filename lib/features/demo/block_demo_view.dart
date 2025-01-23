@@ -27,24 +27,24 @@ class BlockDemoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mainGrid = NestedGrid(
-      columns: 8,  // 使用8列布局
-      rows: 4,     // 使用4行布局
+      columns: 8, // 使用8列布局
+      rows: 4, // 使用4行布局
       padding: const EdgeInsets.all(8),
       spacing: 8,
       items: [
         // 4x4 的主监控面板
         NestedGridItem(
           size: GridSize.size4x4,
-          position: const GridPosition(0, 0),  // 左上角
+          position: const GridPosition(0, 0), // 左上角
           child: NestedGrid(
-            columns: 4,  // 内部使用4列布局
-            rows: 4,     // 内部使用4行布局
+            columns: 4, // 内部使用4列布局
+            rows: 4, // 内部使用4行布局
             spacing: 8,
             items: [
               // 2x2 的系统信息块
               NestedGridItem(
                 size: GridSize.size2x2,
-                position: const GridPosition(0, 0),  // 左上
+                position: const GridPosition(0, 0), // 左上
                 child: BaseBlock(
                   config: BlockConfig(
                     id: 'system_1',
@@ -61,7 +61,7 @@ class BlockDemoView extends StatelessWidget {
               // 2x2 的网络监控块
               NestedGridItem(
                 size: GridSize.size2x2,
-                position: const GridPosition(2, 0),  // 右上
+                position: const GridPosition(2, 0), // 右上
                 child: BaseBlock(
                   config: BlockConfig(
                     id: 'network_1',
@@ -78,7 +78,23 @@ class BlockDemoView extends StatelessWidget {
               // 4x1 的天气信息块
               NestedGridItem(
                 size: GridSize.size4x1,
-                position: const GridPosition(0, 2),  // 底部
+                position: const GridPosition(0, 2), // 底部
+                child: BaseBlock(
+                  config: BlockConfig(
+                    id: 'weather_1',
+                    type: BlockType.weather,
+                    size: GridSize.size4x1,
+                  ),
+                  buildBlockContent: (context) => _buildBlockContent(
+                    context,
+                    Colors.orange[100]!,
+                    GridSize.size4x1,
+                  ),
+                ),
+              ),
+              NestedGridItem(
+                size: GridSize.size4x1,
+                position: const GridPosition(1, 1), // 底部
                 child: BaseBlock(
                   config: BlockConfig(
                     id: 'weather_1',
@@ -98,7 +114,7 @@ class BlockDemoView extends StatelessWidget {
         // 2x2 的独立系统信息块
         NestedGridItem(
           size: GridSize.size2x2,
-          position: const GridPosition(4, 0),  // 右侧
+          position: const GridPosition(4, 0), // 右侧
           child: BaseBlock(
             config: BlockConfig(
               id: 'system_2',
@@ -116,9 +132,6 @@ class BlockDemoView extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('块布局演示'),
-      ),
       body: mainGrid,
     );
   }
